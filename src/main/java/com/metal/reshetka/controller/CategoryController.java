@@ -1,7 +1,9 @@
 package com.metal.reshetka.controller;
 
 import com.metal.reshetka.model.Category;
+import com.metal.reshetka.model.Post;
 import com.metal.reshetka.repository.CategoryRepository;
+import com.metal.reshetka.repository.PostRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -19,6 +21,9 @@ public class CategoryController {
     //region services
     @Autowired
     CategoryRepository categoryRepository;
+
+    @Autowired
+    PostRepository postRepository;
     //endregion
 
     @GetMapping("/list")
@@ -60,6 +65,16 @@ public class CategoryController {
         categoryRepository.delete(category);
 
         return "redirect:category/list";
+    }
+
+    @GetMapping("/{categoryId}/posts")
+    public String getPostsByCategory(Model model,@PathVariable("categoryId") Long categoryId){
+
+        List<Post> postList=postRepository.findByCategoryId(categoryId);
+
+        model.addAttribute("posts",postList);
+
+        return null;
     }
 
 
